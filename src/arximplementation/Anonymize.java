@@ -20,11 +20,13 @@ public class Anonymize {
 		Data data;
 
 		try {
+			//Path where you need to put your input file and get your output dataset
+			String currentDir = new java.io.File( "." ).getCanonicalPath();
+			System.out.println(currentDir);
 			// Import CSV Data
 			data = Data
-					.create("C:\\Users\\Ganesh\\Desktop\\FinalImplementation\\SensorDataCSV.txt",
+					.create(currentDir + "\\SensorDataCSV.txt",
 							',');
-			// Define data type
 
 			// Define Attribute Type
 			// (Sensitive/Insensitive/Quasi-Identifier/Identifying)
@@ -33,7 +35,7 @@ public class Anonymize {
 			data.getDefinition().setAttributeType("Latitude",
 					AttributeType.QUASI_IDENTIFYING_ATTRIBUTE);
 			data.getDefinition().setAttributeType("Longitude",
-					AttributeType.INSENSITIVE_ATTRIBUTE);
+					AttributeType.QUASI_IDENTIFYING_ATTRIBUTE);
 			data.getDefinition().setAttributeType(" Light",
 					AttributeType.INSENSITIVE_ATTRIBUTE);
 			data.getDefinition().setAttributeType("Accuracy",
@@ -61,19 +63,19 @@ public class Anonymize {
 
 			// Defining Hierarchies
 			Hierarchy userHier = Hierarchy
-					.create("C:\\Users\\Ganesh\\Desktop\\FinalImplementation\\UserHier.csv",
+					.create(currentDir + "\\UserHier.csv",
 							';');
 			Hierarchy latHier = Hierarchy
-					.create("C:\\Users\\Ganesh\\Desktop\\FinalImplementation\\LatHier.csv",
+					.create(currentDir + "\\LatHier.csv",
 							';');
 			Hierarchy longHier = Hierarchy
-					.create("C:\\Users\\Ganesh\\Desktop\\FinalImplementation\\LongHier.csv",
+					.create(currentDir + "\\LongHier.csv",
 							';');
 
 			//
 			data.getDefinition().setAttributeType("User", userHier);
 			data.getDefinition().setAttributeType("Latitude", latHier);
-			// data.getDefinition().setAttributeType("Longitude", longHier);
+			data.getDefinition().setAttributeType("Longitude", longHier);
 
 			ARXConfiguration config = ARXConfiguration.create();
 			config.addCriterion(new KAnonymity(2));
@@ -105,7 +107,7 @@ public class Anonymize {
 			System.out.println(view.getStatistics());
 			
 			// Saving and writing the output anonymized data to a file on local disk
-			resultHandle.save("C:\\Users\\Ganesh\\Desktop\\FinalImplementation\\output.txt", ',');
+			resultHandle.save(currentDir + "\\output.txt", ',');
 
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
